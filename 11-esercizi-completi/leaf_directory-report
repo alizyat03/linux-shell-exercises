@@ -1,3 +1,6 @@
+
+#!/bin/bash
+
 # Parametri: D; EXT; S; N; OUTFILE. Lo script deve:
 # - verificare i parametri;
 # - cercare ricorsivamente directory foglia;
@@ -6,8 +9,6 @@
 # - Contare i risultati e:
 #       - Se il numero è maggiore di N --> calcolare dimensione totale e scrivere nell'outfile: directory numero_file dimensione totale ordinato alfabeticamente
 
-
-#!/bin/bash
 
 if [[ $# -ne 5 ]]; then
     echo "Il numero di parametri passati allo script non è corretto" >&2

@@ -1,10 +1,9 @@
+#!/bin/bash
 
 # Script con due parametri: - directory D; - stringa S
 # Per ogni sottodirectory di D:
 # contare quanti file contengono almeno una volta la stringa S;
 # stampare
-
-#!/bin/bash
 
 
 if [[ $# -ne 2 ]]; then
