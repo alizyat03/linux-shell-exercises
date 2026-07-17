@@ -1,0 +1,17 @@
+#!/bin/bash
+
+if [[ $# -lt 2 ]]; then
+    echo "Il numero di parametri passati allo script non è corretto">&2
+    exit 2
+fi
+
+primo_parametro="$1"
+
+echo "Il primo parametro è : '$primo_parametro' "
+
+while [[ $# -gt 1 ]]; do
+    shift
+done
+
+ultimo_parametro=$1
+echo "L'ultimo parametro è : '$ultimo_parametro' "

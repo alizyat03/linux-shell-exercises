@@ -1,0 +1,32 @@
+#!/bin/bash
+
+# Scrivere uno script che controlla di essere invocato con 2 argomenti. Il primo argomento deve rappresentare una directory esistente e scrivibile (D),
+# il secondo un nome di file (F). Lo script crea all'interno della directory D un file di nome F contenente il suo percorso assoluto.
+
+if [[ $# -ne 2 ]]; then
+  echo "Non è stato passato un numero corretto di argomenti allo script" >&2
+  exit 1
+fi
+nome_directory="$1"
+nome_file="$2"
+if [[ ! -d "$nome_directory" || ! -w "$nome_directory" ]]; then
+  echo "Directory non esistente o non scrivibile" >&2
+  exit 1
+fi
+
+
+if ! cd "$nome_directory"; then
+  echo "Operazione di comando change directory non avvenuta correttamente" >&2
+  exit 1
+fi
+
+if [[ -e "$nome_file" ]]; then
+  echo "File già esistente" >&2
+  exit 1
+fi
+
+echo "#!/bin/bash" >"$nome_file"
+percorso_file="$(pwd)"/"$nome_file"
+echo "echo '$percorso_file'" >>"$nome_file"
+chmod 755 "$nome_file"
+exit 0

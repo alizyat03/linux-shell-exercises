@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# Scrivere uno script che visualizza tutti i file della directory corrente che contengono la stringa #!/bin/sh
+
+directory_current="."
+
+while read -r file; do
+    if grep -q '^#!/bin/sh' "$file"; then
+        echo "$file"
+    fi
+done < <(find "$directory_current" -type f -mindepth 1 -maxdepth 1)

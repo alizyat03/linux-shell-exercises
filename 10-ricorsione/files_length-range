@@ -1,0 +1,47 @@
+#!/bin/bash
+
+# Scrivere uno script che prevede 4 parametri. Il primo parametro deve essere il nome assoluto di una directory (D), il secondo deve essere una stringa (F), il terzo (N1) ed il quarto (N2) 
+# vanno trattati come numeri interi positivi. Lo script cerca ricorsivamente in D tutti i file di nome F la cui lunghezza in linee è compresa fra N1 e N2.
+
+if [[ $# -ne 4 ]]; then
+    echo "Il numero di parametri passati allo script non è corretto" >&2
+    exit 1
+else
+    name_directory="$1"
+    string="$2"
+    first_positive_number="$3"
+    second_positive_number="$4"
+
+    if [[ ! -d "$name_directory" || "$name_directory" != /* ]]; then
+        echo "Il parametro passato allo script non rappresenta il nome assoluto di una directory" >&2
+        exit 1
+    fi
+
+    if [[ -z "$string" ]]; then
+        echo "Il parametro passato allo script non rappresenta una stringa" >&2
+        exit 1
+    fi
+
+    if [[ "$first_positive_number" =~ ^[0-9]+$ ]]; then
+        echo "Il parametro passato allo script non rappresenta un numero positivo intero" >&2
+        exit 1
+    fi
+
+    if [[ "$second_positive_number" =~ ^[0-9]+$ ]]; then
+        echo "Il parametro passato allo script non rappresenta un numero positivo intero" >&2
+        exit 1
+    fi
+
+    if [[ "$first_positive_number" -gt "$second_positive_number" ]]; then
+    echo "N1 deve essere minore o uguale a N2" >&2
+    exit 1
+    fi
+
+    find "$name_directory" -type f -name "$string" | while read -r file; do
+        lunghezza_file=$(wc -l < "$file");
+        if [[ "$lunghezza_file" -ge "$first_positive_number"  && "$lunghezza_file" -le "$second_positive_number" ]] ; then
+            echo "File = '$file' Lunghezza file = '$lunghezza_file'";
+        fi
+    done
+    exit 0
+fi

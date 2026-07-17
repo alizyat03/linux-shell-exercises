@@ -1,10 +1,12 @@
+#!/bin/bash
+
 # Write a Bash script that accepts three parameters: A directory path D; A file extension; A positive integer N
 # The script must recursively search the directory D for all leaf directories (i.e., directories that do not contain any subdirectories).
 # For each leaf directory found, count the number of files having the extension specified as the second parameter.
 # A leaf directory is selected only if the number of files with the given extension is greater than N.
 # For every selected directory, print to standard output: its absolute path; the number of matching files.
 
-#!/bin/bash
+
 
 if [[ $# -ne 3 ]]; then
     echo "Il numero di parametri passati allo script non è corretto" >&2

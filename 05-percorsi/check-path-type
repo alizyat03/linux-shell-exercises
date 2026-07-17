@@ -1,0 +1,24 @@
+#!/bin/bash
+
+# Scrivere uno script che accetta 1 argomento e che verifica se tale argomento rappresenta un nome assoluto, relativo, o relativo semplice.
+
+
+
+
+if [[ $# -ne 1 ]]; then
+    echo "Il numero di parametri passati allo script non è corretto" >&2
+    exit 2
+fi
+
+path="$1"
+
+if [[ $path == /* ]]; then
+    echo "L'argomento passato allo script rappresenta un nome assoluto"
+    exit 0
+elif [[ $path == */* || $path == .* || $path == ..* ]]; then
+    echo "L'argomento passato allo script rappresenta un nome relativo"
+    exit 0
+else
+    echo "L'argomento passato allo script rappresenta un nome relativo semplice"
+    exit 0
+fi

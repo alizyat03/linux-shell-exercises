@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# Scrivere uno script che prevede 1 parametro che deve essere il nome assoluto di una directory (D). Lo script deve esplorare ricorsivamente D e stampare, per ogni sotto cartella, il livello di profondità
+# raggiunto. D avrà livello 0, le sottocartelle di D avranno livello 1, e così via. Da risolvere sia utilizzando una funzione ricorsiva, che utilizzando il comando find. Nel caso di find, l'opzione -printf 
+# può essere utile
+
+if [[ $# -ne 1 ]]; then
+    echo "Il numero di argomenti passati allo script non è corretto" >&2
+    exit 1
+fi
+
+name_directory="$1"
+
+if [[ -d "$name_directory" || "$name_directory" == /* ]]; then
+    echo "L'argomento passato allo script non rappresenta il nome assoluto di una directory" >&2
+    exit 1
+fi
+
+find "$name_directory" -type d -printf "%d : %p\n"
+
+exit 0
+

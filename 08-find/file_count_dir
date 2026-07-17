@@ -1,0 +1,30 @@
+#!/bin/bash
+
+# Scrivere uno script che prevede 2 parametri. Il primo parametro deve essere il nome assoluto di una directory (D),
+# mentre il secondo va trattato come un numero intero positivo (N). Lo script cerca ricorsivamente in D tutte le directory
+# che contengono un numero di file (solo file non directory) compreso fra 1 e N.
+
+if [[ $# -ne 2 ]]; then
+  echo "Il numero di parametri passato allo script non è corretto" >&2
+  exit 1
+fi
+
+path_directory="$1"
+number_integer="$2"
+
+if [[ ! -d "$path_directory" || "$path_directory" != /* ]]; then
+  echo "Questo parametro non rappresenta il percorso assoluto di una directory" >&2
+  exit 1
+fi
+
+if [[ ! "$number_integer" =~ ^[0-9]+$ || "$number_integer" -le 0 ]]; then
+  echo "Questo parametro non rappresenta un numero intero positivo" >&2
+  exit 1
+fi
+
+find "$path_directory" -type d | while read -r dir; do
+  number_file=$(find "$dir" -maxdepth 1 -type f | wc -l)
+  if [[ "$number_file" -gt 0 && "$number_file" -le "$number_integer" ]]; then
+    echo "La directory '$dir' contiene un numero totale di '$number_file' file"
+  fi
+done

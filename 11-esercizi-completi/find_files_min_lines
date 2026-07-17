@@ -1,10 +1,10 @@
+#!/bin/bash
+
+
 # Script con tre parametri: Directory, Number_integer_1, OUTFILE. Lo script deve:
 # - cercare ricorsivamente tutti i file regolari;
 # - selezionare solo quelli aventi almeno N righe;
 # salvare nel file OUTFILE;
-
-
-#!/bin/bash
 
 if [[ $# -ne 3 ]]; then
     echo "Il numero di parametri passati allo script non è corretto" >&2

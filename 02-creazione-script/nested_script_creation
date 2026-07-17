@@ -1,0 +1,21 @@
+#!/bin/bash
+
+#  Scrivere uno script che accetta 1 argomento. Lo script crea un file regolare il cui nome è specificato dal primo argomento.
+#  Il file creato deve a sua volta essere uno script che, quando eseguito, stampa la stringa "Hello World!".
+
+if [[ $# -ne 1 ]]; then
+  echo "Errore, numero di argomenti passati al programma non corretto"
+  exit 1
+else
+  nome_file="$1"
+  if [[ -e "$nome_file" ]]; then
+    echo "Il file di cui si è passato il nome esiste già"
+    exit 1
+  else
+    permission_file=755
+    echo "#!/bin/bash" >"$nome_file"
+    echo 'echo "Hello World!"' >>"$nome_file"
+    chmod "$permission_file" "$nome_file"
+  fi
+  exit 0
+fi

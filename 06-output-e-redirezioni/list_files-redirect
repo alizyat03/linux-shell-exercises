@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# Scrivere uno script che visualizza tutti i file della directory corrente. Tutti i file con estensione .sh devono essere stampati su stderr invece che stdout.
+
+for fname in *; do
+    if [[ "$fname" == *.sh ]]; then
+        echo "$fname" >&2
+    else
+        echo "$fname"
+    fi
+done
+

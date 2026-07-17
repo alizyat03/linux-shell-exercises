@@ -1,0 +1,34 @@
+#!/bin/bash
+
+#Scrivere uno script che prevede 2 parametri. Il primo parametro deve essere il nome assoluto di una directory (D), mentre il secondo
+#è un singolo carattere numerico (N). Lo script cerca ricorsivamente in D tutti i file che contengono sia nel nome che nel contenuto N.
+
+usage() {
+  echo "Il numero di parametri passati alla funzione non è corretto"
+  exit 1
+}
+
+if [[ $# -ne 2 ]]; then
+  usage
+  exit 1
+else
+  path_directory="$1"
+  character="$2"
+
+  if [[ "$path_directory" != /* || ! -d "$path_directory" ]]; then
+    echo "Questo argomento non rappresenta un percorso assoluto di directory"
+    exit 1
+  fi
+
+  if [[ ! "$character" =~ ^[0-9]$ ]]; then
+    echo "Questo argomento non rappresenta un singolo carattere numerico"
+    exit 1
+  fi
+
+  find "$path_directory" -type f -name "*$character*" | while read -r file; do
+    if grep -q "$character" "$file"; then
+      echo "Il carattere è stato trovato nel file '$file'"
+    fi
+  done
+fi
+exit 0

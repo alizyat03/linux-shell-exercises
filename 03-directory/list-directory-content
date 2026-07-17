@@ -1,0 +1,33 @@
+#!/bin/bash
+
+# Scrivere uno script che controlla di essere invocato con 1 argomento e che tale argomento rappresenta un nome di directory esistente. Lo script scorre il contenuto della directory 
+# e stampa una F prima di ogni file regolare ed una D prima di ogni directory. Lo script infine riporta su stdout il numero totale di file e di directory stampate.
+
+if [[ $# -ne 1 ]]; then
+    echo "Il numero di parametri passati allo script non è corretto" >&2
+    exit 1
+fi
+
+directory="$1"
+number_files=0
+number_directories=0
+
+if [[ -d "$directory" && -r "$directory" ]]; then
+    for fname in "$directory"/* ; do
+        if [[ -f "$fname" ]]; then
+            printf "File: '%s'\n" "$fname"
+            ((number_files++))
+        elif [[ -d "$fname" ]]; then
+            echo "Directory: '$fname'"
+            ((number_directories++))
+        fi
+    done
+
+    printf "Numero totale file: %d\n" "$number_files"
+    printf "Numero totale directory: %d\n" "$number_directories"
+else
+    echo "Il parametro passato allo script non rappresenta un nome di directory esistente" >&2
+    exit 1
+fi
+
+exit 0

@@ -1,0 +1,16 @@
+#!/bin/bash
+
+if [[ $# -ne 1 ]]; then
+    echo "Il numero di parametri passati allo script non è corretto">&2
+    exit 1
+fi
+
+nome_directory="$1"
+
+if [[ ! -d "$nome_directory" || ! -r "$nome_directory" ]]; then
+echo "L'argomento passato allo script non rappresenta un nome di directory">&2
+exit 2
+fi
+
+echo "Directory valida = '$nome_directory'"
+exit 0
