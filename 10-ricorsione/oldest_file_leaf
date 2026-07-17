@@ -1,0 +1,41 @@
+#!/bin/bash
+
+# Parametri: D, directory. Per ogni directory foglia trovare il file regolare più vecchio, stampare; directory file data_modifica
+
+if [[ $# -ne 1 ]]; then
+    echo "Il numero di passati allo script non è corretto" >&2
+    exit 1
+fi
+
+directory=$1
+
+if [[ ! -d "$directory" || "$directory" != /* ]]; then
+    echo "Il parametro passato allo script non rappresenta il percorso assoluto di una directory" >&2
+    exit 1
+fi
+ 
+while read -r dir; do
+    
+    if find "$dir" -mindepth 1 -type d | grep -q .; then
+        continue
+    fi
+
+    last_file=""
+    last_time=""
+
+    while read -r file; do
+        file_time=$(stat -c %Y "$file")
+
+        if [[ -z "$last_file" || "$file_time" -lt "$last_time" ]]; then
+            last_file="$file"
+            last_time="$file_time"
+        fi
+
+    done < <(find "$dir" -maxdepth 1 -type f)
+    
+    if [[ -n "$last_file" ]]; then
+        echo "$dir: $last_file : $last_time"
+    fi
+
+done < <(find "$directory" -type d)
+

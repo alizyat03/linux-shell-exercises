@@ -1,0 +1,35 @@
+#!/bin/bash
+
+# Parametri: D directory assoluto, N numero positivo. Ricercare ricorsivamente tutti i file regolari aventi:
+# - almeno N righe;
+# permesso di lettura;
+# Stampare path_file numero_righe
+
+if [[ $# -ne 2 ]]; then
+    echo "Il numero di parametri passati allo script non è corretto" >&2
+    exit 1
+fi
+
+directory=$1
+positive_int=$2
+
+if [[ ! -d "$directory" || "$directory" != /* ]]; then
+    echo "Il parametro passato allo script non rappresenta un percorso assoluto di directory" >&2
+    exit 1
+fi
+
+if [[ "$positive_int" -lt 1 ]]; then
+    echo "Il parametro passato non rappresenta un numero intero positivo" >&2
+    exit 1
+fi
+
+while read -r file; do
+    lines_file=0
+    if [[ -r "$file" ]]; then
+        lines_file=$(wc -l < "$file")
+    fi
+    if [[ "$lines_file" -ge "$positive_int" ]]; then
+        echo "$file : $lines_file"
+    fi
+done < <(find "$directory" -type f)
+     

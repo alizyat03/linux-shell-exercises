@@ -1,0 +1,63 @@
+# Parametri: D; EXT; S; N; OUTFILE. Lo script deve:
+# - verificare i parametri;
+# - cercare ricorsivamente directory foglia;
+# - considerare solo file regolari con estensione EXT;
+# - selezionare quelli contenenti la stringa S;
+# - Contare i risultati e:
+#       - Se il numero è maggiore di N --> calcolare dimensione totale e scrivere nell'outfile: directory numero_file dimensione totale ordinato alfabeticamente
+
+
+#!/bin/bash
+
+if [[ $# -ne 5 ]]; then
+    echo "Il numero di parametri passati allo script non è corretto" >&2
+    exit 1
+fi
+
+directory=$1
+estensione=$2
+stringa=$3
+integer_num=$4
+outfile=$5
+
+if [[ ! -d "$directory" || "$directory" != /* ]]; then
+    echo "Il parametro passato allo script non rappresenta il parametro assoluto di una directory" >&2
+    exit 1
+fi
+
+if [[ "$estensione" != .* ]]; then
+    echo "Il parametro passato allo script non rappresenta un'estensione valida" >&2
+    exit 1
+fi
+
+if [[ -z "$stringa" ]]; then
+    echo "Il parametro passato allo script non rappresenta una stringa valida" >&2
+    exit 1
+fi
+
+if [[ "$integer_num" -lt 0 ]]; then
+    echo "Il parametro passato allo script non rappresenta un numero intero valido" >&2
+    exit 1
+fi
+
+if [[ ! -f "$outfile" || ! -w "$outfile" ]]; then
+    echo "Il parametro passato allo script non rappresenta un file regolare valido oppure non ha il permesso di scrittura necessario" >&2
+    exit 1
+fi
+
+> "$outfile"
+
+while read -r dir; do
+    numero_files=0
+    dimensione_files=0
+    while read -r file; do
+        if grep -q -- "$stringa" "$file"; then
+            ((numero_files++))
+            ((dimensione_files+=$(stat -c%s "$file")))
+        fi
+    done < <(find "$dir" -maxdepth 1 -type f -name "*$estensione")
+
+    if [[ "$numero_files" -gt "$integer_num" ]]; then
+        echo "'$dir' \n Numero files ==> '$numero_files' \n Dimensione files ==> '$dimensione_files'" >> "$outfile"
+    fi 
+done < <(find "$directory" -type d -links 2 | sort)

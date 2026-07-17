@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# Parametri: D, directory; size; dimensione. Trovare tutti i file sotto D aventi dimensione maggiore di SIZE. Stampare:
+# - dimensione percorso dei file ordinati per dimensione decrescente
+
+if [[ $# -ne 2 ]]; then
+    echo "Il numero di parametri passati allo script non è corretto" >&2
+    exit 1
+fi
+
+directory=$1
+size=$2
+
+if [[ ! -d "$directory" || "$directory" != /* ]]; then
+    echo "Il parametro passato allo script non rappresenta il percorso assoluto di una directory" >&2
+    exit 1
+fi
+
+if [[ "$size" -lt 0 ]]; then
+    echo "Il parametro passato allo script non rappresenta una dimensione valida di file" >&2
+    exit 1
+fi
+
+while read -r file; do
+    echo "$file"
+done < <(find "$directory" -type f -printf "%s %p\n" | awk -v size="$size" '$1 > size' | sort -nr)

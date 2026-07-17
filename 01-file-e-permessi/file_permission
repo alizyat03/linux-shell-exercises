@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# Scrivere uno script che accetta 2 argomenti. Lo script crea un file regolare vuoto il cui nome è specificato dal primo argomento ed i cui permessi (notazione ottale)
+# sono specificati dal secondo parametro.
+
+if [[ $# -ne 2 ]]; then
+    echo "Il numero di parametri passati allo script non è corretto" >&2
+    exit 2
+fi
+
+nome_file=$1
+permessi_file=$2
+
+if [[ ! -f "$nome_file" ]]; then
+    touch "$nome_file"
+else
+    echo "Il parametro passato allo script rappresenta un file esistente"
+    exit 0
+fi
+
+if [[ ! "$permessi_file" =~ ^[0-7]{3,4}$ ]]; then
+    echo "Il parametro passato non rappresenta un permesso attribuibile ad uno script" >&2
+    exit 2
+else
+    chmod "$permessi_file" "$nome_file"
+    exit 0
+fi
