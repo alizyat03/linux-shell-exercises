@@ -39,3 +39,4 @@ find "$directory" -type f | while read -r file; do
     fi
 done
 
+exit 0

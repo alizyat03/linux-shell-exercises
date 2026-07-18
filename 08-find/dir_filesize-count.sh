@@ -17,20 +17,19 @@ if [[ ! -d "$directory" || "$directory" != /* ]]; then
     exit 1
 fi
 
-if [[ ! "$number_integer" =~ ^[0-9]+$ || "$number_integer" -le 0 ]]; then
+if [[ ! "$integer_positive" =~ ^[0-9]+$ || "$integer_positive" -le 0 ]]; then
   echo "Il parametro non rappresenta un numero intero positivo" >&2
   exit 1
 fi
 
 while read -r dir; do
-    counter_file=0
-    for "$file" in "$dir"; do
-        counter_size=$(stat -c %s "$file" >&2)
-        if [[ "$counter_size" -gt "$number_integer" ]]; then
-            ((counter_file++)) 
-        fi
-    done
-        if [[ "$counter_file" -gt "$number_integer" ]]; then
-            echo "NUMBER_FILES = '$counter_file' ==> DIRECTORY = '$directory'"
-        fi
-done < <(find "$directory" -type d | sort)
+    counter_file=$(find "$dir" -maxdepth 1 -type f -size +"${integer_positive}c" | wc -l)
+    
+    # Stampiamo prima il numero e poi la directory (utile per il sort successivo)
+
+    if [[ $counter_file -gt 0 ]]; then
+        echo "$counter_file $dir"
+    fi
+done < <(find "$directory" -type d) | sort -rn | while read -r num d; do
+    echo "Number_files = '$num' ==> Directory = '$d'"
+done 
